@@ -8,7 +8,7 @@ export default function ProductTable() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/getproducts', {
+        const response = await fetch('https://shobha-stock.onrender.com/getproducts', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

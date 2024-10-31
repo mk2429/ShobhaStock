@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongodb = require('./mongooseConnect');
+const path=require("path");
 
 const app = express();
 mongodb();
@@ -17,6 +18,13 @@ app.use("/api", require("./routes/editProduct"));
 app.use("/api", require("./routes/addProduct"));
 app.use("/api", require("./routes/getPname"));
 
+const currentDir = __dirname;
+console.log("Current Directory:", currentDir);
+
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.get("*", (req, res) =>
+    res.sendFile(path.join(__dirname, "../frontend/build/index.html"))
+  );
 
 
 

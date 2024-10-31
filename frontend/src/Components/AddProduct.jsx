@@ -17,19 +17,19 @@ export default function AddProduct() {
 
     useEffect(() => {
         // Fetch brands from the API
-        fetch('http://localhost:5000/api/getbrands')
+        fetch('https://shobha-stock.onrender.com/getbrands')
             .then(response => response.json())
             .then(data => setBrands(data))
             .catch(error => console.error('Error fetching brands:', error));
 
         // Fetch categories from the API
-        fetch('http://localhost:5000/api/getcategories')
+        fetch('https://shobha-stock.onrender.com/getcategories')
             .then(response => response.json())
             .then(data => setCategories(data))
             .catch(error => console.error('Error fetching categories:', error));
 
         // Fetch all product names from the API
-        fetch('http://localhost:5000/api/getproductnames')
+        fetch('https://shobha-stock.onrender.com/getproductnames')
             .then(response => response.json())
             .then(data => setAllProductNames(data)) // Store all product names
             .catch(error => console.error('Error fetching product names:', error));
@@ -64,7 +64,7 @@ export default function AddProduct() {
             mrp: parseFloat(mrp) || undefined, // optional
         };
 
-        fetch('http://localhost:5000/api/addproduct', {
+        fetch('https://shobha-stock.onrender.com/addproduct', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
