@@ -61,9 +61,21 @@ export default function EditStock() {
         setProducts((prevProducts) => prevProducts.filter(product => product.id !== productId));
     };
 
-    const filteredProducts = products.filter(product =>
-        product.pname.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Filter products based on the selected brand, category, and search query
+    const filteredProducts = products.filter(product => {
+        const combinedString = `${product.pname} ${product.bname} ${product.cname}`.toLowerCase();
+        const searchWords = searchQuery.toLowerCase().split(' ');
+
+        // Check if the selected brand and category match the product
+        const isBrandMatch = selectedBrand.bname === "All Brands" || product.bname.toLowerCase() === selectedBrand.bname.toLowerCase();
+        const isCategoryMatch = selectedCategory.cname === "All Categories" || product.cname.toLowerCase() === selectedCategory.cname.toLowerCase();
+        
+        // Check if all search words are included in the combined string
+        const isSearchMatch = searchWords.every(word => combinedString.includes(word));
+
+        // Return products that match the brand, category, and search term
+        return isBrandMatch && isCategoryMatch && isSearchMatch;
+    });
 
     return (
         <div className='w-100 d-flex justify-content-center align-items-center flex-column'>
@@ -72,7 +84,7 @@ export default function EditStock() {
                 <input
                     type="text"
                     className="form-control my-3"
-                    placeholder="Search by product name"
+                    placeholder="Search by product name, brand, or category..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />

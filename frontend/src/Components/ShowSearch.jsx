@@ -8,7 +8,7 @@ export default function ShowSearch() {
     const [selectedCategory, setSelectedCategory] = useState({ cname: "All Categories", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' });
     const [loading, setLoading] = useState(false);
     const [products, setProducts] = useState([]);
-    const [searchPerformed, setSearchPerformed] = useState(false); 
+    const [searchPerformed, setSearchPerformed] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
@@ -55,10 +55,21 @@ export default function ShowSearch() {
             });
     };
 
-    // Filter products based on the search term
-    const filteredProducts = products.filter(product =>
-        product.pname.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Filter products based on the search term, selected brand, and category
+    const filteredProducts = products.filter(product => {
+        const combinedString = `${product.pname} ${product.bname} ${product.cname}`.toLowerCase();
+        const searchWords = searchTerm.toLowerCase().split(' ');
+
+        // Check if the selected brand and category match the product
+        const isBrandMatch = selectedBrand.bname === "All Brands" || product.bname.toLowerCase() === selectedBrand.bname.toLowerCase();
+        const isCategoryMatch = selectedCategory.cname === "All Categories" || product.cname.toLowerCase() === selectedCategory.cname.toLowerCase();
+        
+        // Check if all search words are included in the combined string
+        const isSearchMatch = searchWords.every(word => combinedString.includes(word));
+
+        // Return products that match the brand, category, and search term
+        return isBrandMatch && isCategoryMatch && isSearchMatch;
+    });
 
     return (
         <div className='w-100 d-flex justify-content-center align-items-center flex-column'>
@@ -67,7 +78,7 @@ export default function ShowSearch() {
                 <input
                     type="text"
                     className="form-control mb-3"
-                    placeholder="Search by product name..."
+                    placeholder="Search by product name, brand or category..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -153,7 +164,7 @@ export default function ShowSearch() {
                                         key={category.id}
                                         onClick={() => setSelectedCategory(category)}
                                         className="dropdown-item d-flex align-items-center"
-                                        style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px',border:"2px solid black" }}
+                                        style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px', border: "2px solid black" }}
                                     >
                                         <img
                                             src={category.logo}

@@ -57,7 +57,7 @@ export default function ProductCard({ pname, bname, cname, price, pimage }) {
   };
 
   return (
-    <div style={{ position: 'relative', width: '160px' }}>
+    <div style={{ position: 'relative', width: '160px' ,padding:"0px"}}>
       <div className="card" style={cardStyle}>
         <img
           className="card-img-top"
@@ -146,6 +146,7 @@ const cardStyle = {
   height: '290px', // Set a fixed height for the card
   display: 'flex',
   flexDirection: 'column',
+  padding:"0px"
 };
 
 const overlayStyle = {
