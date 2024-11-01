@@ -77,6 +77,18 @@ export default function EditStock() {
         return isBrandMatch && isCategoryMatch && isSearchMatch;
     });
 
+    // Reset search query when brand is selected
+    const handleBrandSelect = (brand) => {
+        setSelectedBrand(brand);
+        setSearchQuery(''); // Reset search query
+    };
+
+    // Reset search query when category is selected
+    const handleCategorySelect = (category) => {
+        setSelectedCategory(category);
+        setSearchQuery(''); // Reset search query
+    };
+
     return (
         <div className='w-100 d-flex justify-content-center align-items-center flex-column'>
             <div className='d-flex justify-content-center align-items-center flex-column w-100'>
@@ -111,7 +123,7 @@ export default function EditStock() {
                         <div className="dropdown-menu p-2" aria-labelledby="brandDropdown">
                             <div className="d-flex flex-wrap">
                                 <div
-                                    onClick={() => setSelectedBrand({ bname: "All Brands", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })}
+                                    onClick={() => handleBrandSelect({ bname: "All Brands", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })}
                                     className="dropdown-item"
                                     style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
                                 >
@@ -120,7 +132,7 @@ export default function EditStock() {
                                 {brands.map(brand => (
                                     <div
                                         key={brand.id}
-                                        onClick={() => setSelectedBrand(brand)}
+                                        onClick={() => handleBrandSelect(brand)}
                                         className="dropdown-item d-flex align-items-center"
                                         style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
                                     >
@@ -159,7 +171,7 @@ export default function EditStock() {
                         <div className="dropdown-menu p-2" aria-labelledby="categoryDropdown">
                             <div className="d-flex flex-wrap">
                                 <div
-                                    onClick={() => setSelectedCategory({ cname: "All Categories", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })}
+                                    onClick={() => handleCategorySelect({ cname: "All Categories", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })}
                                     className="dropdown-item"
                                     style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
                                 >
@@ -168,7 +180,7 @@ export default function EditStock() {
                                 {categories.map(category => (
                                     <div
                                         key={category.id}
-                                        onClick={() => setSelectedCategory(category)}
+                                        onClick={() => handleCategorySelect(category)}
                                         className="dropdown-item d-flex align-items-center"
                                         style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
                                     >
