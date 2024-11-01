@@ -74,7 +74,7 @@ export default function ProductCard({ pname, bname, cname, price, pimage }) {
             whiteSpace: "normal", // Allow text to wrap
             marginBottom: 'auto', // Push button to the bottom
           }}>{pname}</p>
-          <h6 className="card-text text-align-center">₹{price}</h6>
+          <h6 className="card-text text-align-center" style={{textAlign:"center"}}>₹{price}</h6>
           <button className="btn btn-success" onClick={handleSellClick}>
             Sell
           </button>

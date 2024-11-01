@@ -8,16 +8,16 @@ export default function ShowSearch() {
     const [selectedCategory, setSelectedCategory] = useState({ cname: "All Categories", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' });
     const [loading, setLoading] = useState(false);
     const [products, setProducts] = useState([]);
-    const [searchPerformed, setSearchPerformed] = useState(false); // New state variable
+    const [searchPerformed, setSearchPerformed] = useState(false); 
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        // Fetch brands from the API
+        // Fetch brands and categories from the API
         fetch('https://shobha-stock.onrender.com/api/getbrands')
             .then(response => response.json())
             .then(data => setBrands(data))
             .catch(error => console.error('Error fetching brands:', error));
 
-        // Fetch categories from the API
         fetch('https://shobha-stock.onrender.com/api/getcategories')
             .then(response => response.json())
             .then(data => setCategories(data))
@@ -28,7 +28,7 @@ export default function ShowSearch() {
         setLoading(true);
         const requestBody = {
             bname: selectedBrand.bname,
-            cname: selectedCategory.cname
+            cname: selectedCategory.cname,
         };
 
         fetch('https://shobha-stock.onrender.com/api/getproducts', {
@@ -46,7 +46,7 @@ export default function ShowSearch() {
             })
             .then(data => {
                 setProducts(data);
-                setSearchPerformed(true); // Set search performed to true
+                setSearchPerformed(true);
                 setLoading(false);
             })
             .catch(error => {
@@ -55,9 +55,23 @@ export default function ShowSearch() {
             });
     };
 
+    // Filter products based on the search term
+    const filteredProducts = products.filter(product =>
+        product.pname.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div className='w-100 d-flex justify-content-center align-items-center flex-column'>
             <div className='d-flex justify-content-center align-items-center flex-column w-100'>
+                {/* Search Box */}
+                <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Search by product name..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+
                 {/* Custom Dropdown for Brands */}
                 <div className='d-flex justify-content-center align-items-center mb-3 w-100 mx-1'>
                     <div className="dropdown w-100" style={{ position: 'relative' }}>
@@ -77,27 +91,32 @@ export default function ShowSearch() {
                                 {selectedBrand.bname}
                             </div>
                         </button>
-                        <ul className="dropdown-menu" aria-labelledby="brandDropdown">
-                            {/* "All" Option */}
-                            <li onClick={() => setSelectedBrand({ bname: "All Brands", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })} className="dropdown-item" style={{ cursor: 'pointer' }}>
-                                All Brands
-                            </li>
-                            {brands.map((brand) => (
-                                <li
-                                    key={brand.id}
-                                    onClick={() => setSelectedBrand(brand)}
-                                    className="dropdown-item d-flex align-items-center"
-                                    style={{ cursor: 'pointer' }}
+                        <div className="dropdown-menu p-2" aria-labelledby="brandDropdown">
+                            <div className="d-flex flex-wrap">
+                                <div
+                                    onClick={() => setSelectedBrand({ bname: "All Brands", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })}
+                                    className="dropdown-item"
+                                    style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
                                 >
-                                    <img
-                                        src={brand.logo}
-                                        alt={`${brand.bname} logo`}
-                                        style={{ width: "80px", height: "60px", marginRight: "10px" }}
-                                    />
-                                    {brand.bname}
-                                </li>
-                            ))}
-                        </ul>
+                                    All Brands
+                                </div>
+                                {brands.map(brand => (
+                                    <div
+                                        key={brand.id}
+                                        onClick={() => setSelectedBrand(brand)}
+                                        className="dropdown-item d-flex align-items-center"
+                                        style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
+                                    >
+                                        <img
+                                            src={brand.logo}
+                                            alt={`${brand.bname} logo`}
+                                            style={{ width: "40px", height: "30px", marginRight: "10px" }}
+                                        />
+                                        {brand.bname}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -120,27 +139,32 @@ export default function ShowSearch() {
                                 {selectedCategory.cname}
                             </div>
                         </button>
-                        <ul className="dropdown-menu" aria-labelledby="categoryDropdown">
-                            {/* "All" Option */}
-                            <li onClick={() => setSelectedCategory({ cname: "All Categories", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })} className="dropdown-item" style={{ cursor: 'pointer' }}>
-                                All Categories
-                            </li>
-                            {categories.map((category) => (
-                                <li
-                                    key={category.id}
-                                    onClick={() => setSelectedCategory(category)}
-                                    className="dropdown-item d-flex align-items-center"
-                                    style={{ cursor: 'pointer' }}
+                        <div className="dropdown-menu p-2" aria-labelledby="categoryDropdown">
+                            <div className="d-flex flex-wrap">
+                                <div
+                                    onClick={() => setSelectedCategory({ cname: "All Categories", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })}
+                                    className="dropdown-item"
+                                    style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
                                 >
-                                    <img
-                                        src={category.logo}
-                                        alt={`${category.cname} logo`}
-                                        style={{ width: "80px", height: "60px", marginRight: "10px" }}
-                                    />
-                                    {category.cname}
-                                </li>
-                            ))}
-                        </ul>
+                                    All Categories
+                                </div>
+                                {categories.map(category => (
+                                    <div
+                                        key={category.id}
+                                        onClick={() => setSelectedCategory(category)}
+                                        className="dropdown-item d-flex align-items-center"
+                                        style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px',border:"2px solid black" }}
+                                    >
+                                        <img
+                                            src={category.logo}
+                                            alt={`${category.cname} logo`}
+                                            style={{ width: "40px", height: "30px", marginRight: "10px" }}
+                                        />
+                                        {category.cname}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -156,12 +180,12 @@ export default function ShowSearch() {
 
             {/* Display Products */}
             <div className='d-flex flex-wrap justify-content-center'>
-                {searchPerformed && products.length === 0 ? ( // Check if a search has been performed and no products found
+                {searchPerformed && filteredProducts.length === 0 ? (
                     <div className='alert alert-info' style={{ textAlign: 'center', width: '100%' }}>
                         No Products Available
                     </div>
                 ) : (
-                    products.map(product => (
+                    filteredProducts.map(product => (
                         <div key={product._id} className='m-2'>
                             <ProductCard
                                 pname={product.pname}

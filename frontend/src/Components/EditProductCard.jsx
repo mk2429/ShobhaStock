@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 
-export default function EditProductCard({ pname, bname, cname, price, quantity, pimage, pid, updateProduct }) {
+export default function EditProductCard({ pname, bname, cname, price, quantity, pimage, pid, updateProduct,removeProduct }) {
     const validPrice = typeof price === 'object' ? price.$numberDecimal : price;
     const validQuantity = typeof quantity === 'object' ? quantity.$numberDecimal : quantity;
     const [showOverlay, setShowOverlay] = useState(false);
     const [newPrice, setNewPrice] = useState(validPrice);
     const [newQuantity, setNewQuantity] = useState(validQuantity);
     const [loading, setLoading] = useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
     const handleEditClick = () => setShowOverlay(true);
 
     const handleCloseOverlay = () => {
         setShowOverlay(false);
-        setNewPrice(validPrice); // Reset to initial price
-        setNewQuantity(validQuantity); // Reset to initial quantity
+        setNewPrice(validPrice);
+        setNewQuantity(validQuantity);
     };
 
     const handleSubmit = async (e) => {
@@ -38,7 +39,7 @@ export default function EditProductCard({ pname, bname, cname, price, quantity, 
 
             if (response.ok) {
                 alert('Product updated successfully!');
-                updateProduct({ id: pid, price: newPrice, quantity: newQuantity }); // Update product in parent
+                updateProduct({ id: pid, price: newPrice, quantity: newQuantity });
                 handleCloseOverlay();
             } else {
                 alert(`Failed to update the product: ${responseText}`);
@@ -48,6 +49,32 @@ export default function EditProductCard({ pname, bname, cname, price, quantity, 
             alert('An error occurred while updating the product.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDeleteClick = () => setShowDeleteConfirmation(true);
+
+    const handleDelete = async () => {
+        const deleteData = { pid: String(pid) };
+
+        try {
+            const response = await fetch('https://shobha-stock.onrender.com/api/deleteproduct', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(deleteData),
+            });
+
+            if (response.ok) {
+                alert('Product deleted successfully!');
+                // You might want to call a function here to remove the product from the parent component
+                removeProduct(pid);
+                handleCloseOverlay();
+            } else {
+                alert('Failed to delete the product.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the product.');
         }
     };
 
@@ -69,7 +96,7 @@ export default function EditProductCard({ pname, bname, cname, price, quantity, 
                     </button>
                 </div>
             </div>
-        
+
             {showOverlay && (
                 <div style={overlayStyle}>
                     <div style={formContainerStyle}>
@@ -99,7 +126,21 @@ export default function EditProductCard({ pname, bname, cname, price, quantity, 
                             <button type="submit" className="btn btn-success mt-3" disabled={loading}>
                                 {loading ? 'Loading...' : 'Submit'}
                             </button>
+                            <button type="button" className="btn btn-danger mt-3 ml-2 mx-2" onClick={handleDeleteClick}>
+                                Delete
+                            </button>
                         </form>
+                        {showDeleteConfirmation && (
+                            <div style={popupStyle}>
+                                <p>Are you sure you want to delete this product?</p>
+                                <button className="btn btn-danger mx-2" onClick={handleDelete}>
+                                    Yes, Delete it
+                                </button>
+                                <button className="btn btn-secondary ml-2" onClick={() => setShowDeleteConfirmation(false)}>
+                                    No
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
@@ -116,7 +157,7 @@ const cardStyle = {
     display: 'flex',
     flexDirection: 'column',
 };
-  
+
 const overlayStyle = {
     position: 'fixed',
     top: 0,
@@ -129,7 +170,7 @@ const overlayStyle = {
     alignItems: 'center',
     zIndex: 1000,
 };
-  
+
 const formContainerStyle = {
     backgroundColor: 'white',
     padding: '30px',
@@ -138,7 +179,7 @@ const formContainerStyle = {
     position: 'relative',
     boxShadow: '0 0 15px rgba(0, 0, 0, 0.3)',
 };
-  
+
 const closeButtonStyle = {
     position: 'absolute',
     top: '10px',
@@ -156,4 +197,9 @@ const titleStyle = {
     textOverflow: "ellipsis",
     whiteSpace: "normal",
     marginBottom: 'auto',
+};
+
+const popupStyle = {
+    marginTop: '20px',
+    textAlign: 'center',
 };

@@ -17,6 +17,8 @@ app.use("/api", require("./routes/sales"));
 app.use("/api", require("./routes/editProduct"));
 app.use("/api", require("./routes/addProduct"));
 app.use("/api", require("./routes/getPname"));
+app.use("/api", require("./routes/deleteProduct"));
+
 
 const currentDir = __dirname;
 console.log("Current Directory:", currentDir);

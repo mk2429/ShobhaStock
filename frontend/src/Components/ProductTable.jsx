@@ -70,6 +70,11 @@ export default function ProductTable() {
             <th>PNAME</th>
             <th>QUANTITY</th>
             <th>PRICE</th>
+            <th>BRAND</th>
+            <th>CATEGORY</th>
+            <th>VENDOR</th>
+            <th>DOP</th>
+
           </tr>
         </thead>
         <tbody>
@@ -78,6 +83,10 @@ export default function ProductTable() {
               <td>{product.pname}</td>
               <td>{product.quantity}</td>
               <td>₹{product.price}</td>
+              <td>{product.bname}</td>
+              <td>{product.cname}</td>
+              <td>{product.vendor}</td>
+              <td>{product.dop}</td>
             </tr>
           ))}
         </tbody>

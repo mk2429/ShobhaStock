@@ -4,11 +4,12 @@ import EditProductCard from './EditProductCard';
 export default function EditStock() {
     const [brands, setBrands] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [selectedBrand, setSelectedBrand] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedBrand, setSelectedBrand] = useState({ bname: "All Brands", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' });
+    const [selectedCategory, setSelectedCategory] = useState({ cname: "All Categories", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' });
     const [loading, setLoading] = useState(false);
     const [products, setProducts] = useState([]);
     const [searchPerformed, setSearchPerformed] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         // Fetch brands from the API
@@ -25,15 +26,10 @@ export default function EditStock() {
     }, []);
 
     const handleSearch = () => {
-        if (!selectedBrand && !selectedCategory) {
-            alert("Please select a brand and a category.");
-            return;
-        }
-
         setLoading(true);
         const requestBody = {
-            bname: selectedBrand && selectedBrand.bname ? selectedBrand.bname : "All",
-            cname: selectedCategory && selectedCategory.cname ? selectedCategory.cname : "All"
+            bname: selectedBrand.bname,
+            cname: selectedCategory.cname,
         };
 
         fetch('https://shobha-stock.onrender.com/api/getproducts', {
@@ -41,10 +37,7 @@ export default function EditStock() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestBody),
         })
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 setProducts(data);
                 setSearchPerformed(true);
@@ -56,7 +49,6 @@ export default function EditStock() {
             });
     };
 
-    // Update product in the list
     const updateProduct = (updatedProduct) => {
         setProducts((prevProducts) =>
             prevProducts.map((product) =>
@@ -65,9 +57,26 @@ export default function EditStock() {
         );
     };
 
+    const removeProduct = (productId) => {
+        setProducts((prevProducts) => prevProducts.filter(product => product.id !== productId));
+    };
+
+    const filteredProducts = products.filter(product =>
+        product.pname.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className='w-100 d-flex justify-content-center align-items-center flex-column'>
             <div className='d-flex justify-content-center align-items-center flex-column w-100'>
+                {/* Search Box */}
+                <input
+                    type="text"
+                    className="form-control my-3"
+                    placeholder="Search by product name"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+
                 {/* Custom Dropdown for Brands */}
                 <div className='d-flex justify-content-center align-items-center mb-3 w-100 mx-1'>
                     <div className="dropdown w-100" style={{ position: 'relative' }}>
@@ -78,39 +87,41 @@ export default function EditStock() {
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
                         >
-                            {selectedBrand ? (
-                                <div className="d-flex align-items-center">
-                                    <img
-                                        src={selectedBrand.logo}
-                                        alt={`${selectedBrand.bname} logo`}
-                                        style={{ width: "80px", height: "60px", marginRight: "10px" }}
-                                    />
-                                    {selectedBrand.bname}
-                                </div>
-                            ) : (
-                                "Select Brand"
-                            )}
+                            <div className="d-flex align-items-center">
+                                <img
+                                    src={selectedBrand.logo}
+                                    alt={`${selectedBrand.bname} logo`}
+                                    style={{ width: "80px", height: "60px", marginRight: "10px" }}
+                                />
+                                {selectedBrand.bname}
+                            </div>
                         </button>
-                        <ul className="dropdown-menu" aria-labelledby="brandDropdown">
-                            <li onClick={() => setSelectedBrand({ bname: "All Brands", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })} className="dropdown-item" style={{ cursor: 'pointer' }}>
-                                All Brands
-                            </li>
-                            {brands.map((brand) => (
-                                <li
-                                    key={brand.id}
-                                    onClick={() => setSelectedBrand(brand)}
-                                    className="dropdown-item d-flex align-items-center"
-                                    style={{ cursor: 'pointer' }}
+                        <div className="dropdown-menu p-2" aria-labelledby="brandDropdown">
+                            <div className="d-flex flex-wrap">
+                                <div
+                                    onClick={() => setSelectedBrand({ bname: "All Brands", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })}
+                                    className="dropdown-item"
+                                    style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
                                 >
-                                    <img
-                                        src={brand.logo}
-                                        alt={`${brand.bname} logo`}
-                                        style={{ width: "80px", height: "60px", marginRight: "10px" }}
-                                    />
-                                    {brand.bname}
-                                </li>
-                            ))}
-                        </ul>
+                                    All Brands
+                                </div>
+                                {brands.map(brand => (
+                                    <div
+                                        key={brand.id}
+                                        onClick={() => setSelectedBrand(brand)}
+                                        className="dropdown-item d-flex align-items-center"
+                                        style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
+                                    >
+                                        <img
+                                            src={brand.logo}
+                                            alt={`${brand.bname} logo`}
+                                            style={{ width: "40px", height: "30px", marginRight: "10px" }}
+                                        />
+                                        {brand.bname}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -124,39 +135,41 @@ export default function EditStock() {
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
                         >
-                            {selectedCategory ? (
-                                <div className="d-flex align-items-center">
-                                    <img
-                                        src={selectedCategory.logo}
-                                        alt={`${selectedCategory.cname} logo`}
-                                        style={{ width: "80px", height: "60px", marginRight: "10px" }}
-                                    />
-                                    {selectedCategory.cname}
-                                </div>
-                            ) : (
-                                "Select Category"
-                            )}
+                            <div className="d-flex align-items-center">
+                                <img
+                                    src={selectedCategory.logo}
+                                    alt={`${selectedCategory.cname} logo`}
+                                    style={{ width: "80px", height: "60px", marginRight: "10px" }}
+                                />
+                                {selectedCategory.cname}
+                            </div>
                         </button>
-                        <ul className="dropdown-menu" aria-labelledby="categoryDropdown">
-                            <li onClick={() => setSelectedCategory({ cname: "All Categories", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })} className="dropdown-item" style={{ cursor: 'pointer' }}>
-                                All Categories
-                            </li>
-                            {categories.map((category) => (
-                                <li
-                                    key={category.id}
-                                    onClick={() => setSelectedCategory(category)}
-                                    className="dropdown-item d-flex align-items-center"
-                                    style={{ cursor: 'pointer' }}
+                        <div className="dropdown-menu p-2" aria-labelledby="categoryDropdown">
+                            <div className="d-flex flex-wrap">
+                                <div
+                                    onClick={() => setSelectedCategory({ cname: "All Categories", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })}
+                                    className="dropdown-item"
+                                    style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
                                 >
-                                    <img
-                                        src={category.logo}
-                                        alt={`${category.cname} logo`}
-                                        style={{ width: "80px", height: "60px", marginRight: "10px" }}
-                                    />
-                                    {category.cname}
-                                </li>
-                            ))}
-                        </ul>
+                                    All Categories
+                                </div>
+                                {categories.map(category => (
+                                    <div
+                                        key={category.id}
+                                        onClick={() => setSelectedCategory(category)}
+                                        className="dropdown-item d-flex align-items-center"
+                                        style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
+                                    >
+                                        <img
+                                            src={category.logo}
+                                            alt={`${category.cname} logo`}
+                                            style={{ width: "40px", height: "30px", marginRight: "10px" }}
+                                        />
+                                        {category.cname}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -172,12 +185,12 @@ export default function EditStock() {
 
             {/* Display Products */}
             <div className='d-flex flex-wrap justify-content-center'>
-                {searchPerformed && products.length === 0 ? (
+                {searchPerformed && filteredProducts.length === 0 ? (
                     <div className='alert alert-info' style={{ textAlign: 'center', width: '100%' }}>
                         No Products Available
                     </div>
                 ) : (
-                    products.map(product => (
+                    filteredProducts.map(product => (
                         <div key={product._id} className='m-2'>
                             <EditProductCard
                                 pname={product.pname}
@@ -187,12 +200,13 @@ export default function EditStock() {
                                 price={product.price}
                                 pid={product.id}
                                 quantity={product.quantity}
-                                updateProduct={updateProduct} // Pass updateProduct to EditProductCard
+                                removeProduct={removeProduct}
+                                updateProduct={updateProduct}
                             />
                         </div>
                     ))
                 )}
             </div>
         </div>
-    )
+    );
 }

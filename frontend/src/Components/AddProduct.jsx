@@ -6,7 +6,7 @@ export default function AddProduct() {
     const [selectedBrand, setSelectedBrand] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [productName, setProductName] = useState('');
-    const [allProductNames, setAllProductNames] = useState([]); // Store all product names
+    const [allProductNames, setAllProductNames] = useState([]);
     const [availableProductNames, setAvailableProductNames] = useState([]);
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
@@ -14,24 +14,22 @@ export default function AddProduct() {
     const [dop, setDop] = useState('');
     const [vendor, setVendor] = useState('');
     const [mrp, setMrp] = useState('');
+    const [isLoading, setIsLoading] = useState(false); // New state for loading
 
     useEffect(() => {
-        // Fetch brands from the API
         fetch('https://shobha-stock.onrender.com/api/getbrands')
             .then(response => response.json())
             .then(data => setBrands(data))
             .catch(error => console.error('Error fetching brands:', error));
 
-        // Fetch categories from the API
         fetch('https://shobha-stock.onrender.com/api/getcategories')
             .then(response => response.json())
             .then(data => setCategories(data))
             .catch(error => console.error('Error fetching categories:', error));
 
-        // Fetch all product names from the API
         fetch('https://shobha-stock.onrender.com/api/getproductnames')
             .then(response => response.json())
-            .then(data => setAllProductNames(data)) // Store all product names
+            .then(data => setAllProductNames(data))
             .catch(error => console.error('Error fetching product names:', error));
     }, []);
 
@@ -39,7 +37,6 @@ export default function AddProduct() {
         const name = e.target.value;
         setProductName(name);
 
-        // Filter available product names based on user input
         if (name) {
             const filteredNames = allProductNames.filter((product) =>
                 product.toLowerCase().includes(name.toLowerCase())
@@ -50,18 +47,24 @@ export default function AddProduct() {
         }
     };
 
+    const handleProductNameSelect = (name) => {
+        setProductName(name);
+        setAvailableProductNames([]); // Hide the suggestions
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true); // Start loading
         const requestBody = {
             pname: productName,
             bname: selectedBrand ? selectedBrand.bname : '',
             cname: selectedCategory ? selectedCategory.cname : '',
             price: parseFloat(price),
             quantity: parseInt(quantity),
-            logo: logo || undefined, // optional
-            dop: dop || undefined, // optional
-            vendor: vendor || undefined, // optional
-            mrp: parseFloat(mrp) || undefined, // optional
+            logo: logo || undefined,
+            dop: dop || undefined,
+            vendor: vendor || undefined,
+            mrp: parseFloat(mrp) || undefined,
         };
 
         fetch('https://shobha-stock.onrender.com/api/addproduct', {
@@ -85,11 +88,14 @@ export default function AddProduct() {
                 setDop('');
                 setVendor('');
                 setMrp('');
-                setAvailableProductNames([]); // Clear available product names
+                setAvailableProductNames([]);
             })
             .catch(error => {
                 console.error('Error adding product:', error);
                 alert('Error adding product');
+            })
+            .finally(() => {
+                setIsLoading(false); // Stop loading
             });
     };
 
@@ -146,7 +152,11 @@ export default function AddProduct() {
                     {availableProductNames.length > 0 && (
                         <ul className="list-group bg-warning">
                             {availableProductNames.map((name, index) => (
-                                <li key={index} className="list-group-item" onClick={() => setProductName(name)}>
+                                <li
+                                    key={index}
+                                    className="list-group-item"
+                                    onClick={() => handleProductNameSelect(name)} // Use the updated function
+                                >
                                     {name}
                                 </li>
                             ))}
@@ -228,7 +238,9 @@ export default function AddProduct() {
                     />
                 </div>
 
-                <button type="submit" className="btn btn-primary">Add Product</button>
+                <button type="submit" className="btn btn-primary" disabled={isLoading}>
+                    {isLoading ? 'Loading...' : 'Add Product'}
+                </button>
             </form>
         </div>
     );
