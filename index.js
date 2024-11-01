@@ -18,6 +18,12 @@ app.use("/api", require("./routes/editProduct"));
 app.use("/api", require("./routes/addProduct"));
 app.use("/api", require("./routes/getPname"));
 app.use("/api", require("./routes/deleteProduct"));
+app.use("/api", require("./routes/addCategory"));
+app.use("/api", require("./routes/addBrand"));
+app.use("/api", require("./routes/getSales"));
+
+
+
 
 
 const currentDir = __dirname;

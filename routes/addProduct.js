@@ -9,8 +9,12 @@ router.post("/addproduct", async (req, res) => {
 
         const { pname, bname, cname, price, quantity, logo, dop } = req.body;
 
-        // Check if the product already exists
-        const existingProduct = await productCollection.findOne({ pname, bname, cname });
+        // Check if the product already exists (case-insensitive)
+        const existingProduct = await productCollection.findOne({
+            pname: { $regex: new RegExp(`^${pname}$`, 'i') },
+            bname: { $regex: new RegExp(`^${bname}$`, 'i') },
+            cname: { $regex: new RegExp(`^${cname}$`, 'i') },
+        });
 
         // Function to format date in dd/mm/yyyy format
         const formatDate = (date) => {
@@ -96,4 +100,4 @@ router.post("/addproduct", async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = router; // Make sure to export the router
