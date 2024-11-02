@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import ShowAll from './ShowAll';
 import EditStock from './EditStock';
-import AddProduct from './AddProduct';    // Import the AddProduct component
-import AddCategory from './AddCategory';  // Import the AddCategory component
-import AddBrand from './AddBrand';        // Import the AddBrand component
-import AllSales from './AllSales';        // Import the AllSales component
+import AddProduct from './AddProduct';
+import AddCategory from './AddCategory';
+import AddBrand from './AddBrand';
+import AllSales from './AllSales';
 
 export default function EditPage() {
-  const [view, setView] = useState('edit');  // Track which view to display
+  const [view, setView] = useState('edit');
 
   const handleShowSearch = () => {
     setView('edit');
@@ -18,62 +18,65 @@ export default function EditPage() {
   };
 
   const handleAddProduct = () => {
-    setView('add');  // Update view to show AddProduct component
+    setView('add');
   };
 
   const handleAddCategory = () => {
-    setView('addCategory');  // Update view to show AddCategory component
+    setView('addCategory');
   };
 
   const handleAddBrand = () => {
-    setView('addBrand');  // Update view to show AddBrand component
+    setView('addBrand');
   };
 
   const handleAllSales = () => {
-    setView('allSales');  // Update view to show AllSales component
+    setView('allSales');
   };
 
   return (
     <div className="container">
       <h1 className="text-danger text-center my-4">Shobha Inventory</h1>
-      <div className="d-flex justify-content-center mb-3">
+      <div 
+        className="d-flex flex-wrap justify-content-center mb-3"
+        style={{ gap: '10px' }}  // Add gap for spacing between buttons
+      >
         <button
-          className="btn btn-primary mx-2"
+          className="btn btn-primary"
           onClick={handleShowSearch}
           disabled={view === 'edit'}
         >
           Edit An Item
         </button>
         <button
-          className="btn btn-warning mx-2"
+          className="btn btn-warning"
           onClick={handleShowAll}
           disabled={view === 'all'}
         >
           All Stock
         </button>
         <button
-          className="btn btn-success mx-2"
+          className="btn btn-success"
           onClick={handleAddProduct}
           disabled={view === 'add'}
         >
           Add Product
         </button>
         <button
-          className="btn btn-info mx-2"
+          className="btn btn-info"
           onClick={handleAddCategory}
           disabled={view === 'addCategory'}
         >
           Add Category
         </button>
         <button
-          className="btn btn-secondary mx-2"
+          className="btn btn-secondary"
           onClick={handleAddBrand}
           disabled={view === 'addBrand'}
         >
           Add Brand
         </button>
         <button
-          className="btn btn-dark mx-2"
+          className="btn btn-dark"
           onClick={handleAllSales}
           disabled={view === 'allSales'}
         >
@@ -87,7 +90,7 @@ export default function EditPage() {
       {view === 'add' && <AddProduct />}
       {view === 'addCategory' && <AddCategory />}
       {view === 'addBrand' && <AddBrand />}
-      {view === 'allSales' && <AllSales />}  {/* Render AllSales component */}
+      {view === 'allSales' && <AllSales />}
     </div>
   );
 }
