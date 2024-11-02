@@ -73,6 +73,7 @@ export default function ProductTable() {
             <th>BRAND</th>
             <th>CATEGORY</th>
             <th>VENDOR</th>
+            <th>MRP</th>
             <th>DOP</th>
 
           </tr>
@@ -86,6 +87,7 @@ export default function ProductTable() {
               <td>{product.bname}</td>
               <td>{product.cname}</td>
               <td>{product.vendor}</td>
+              <td>{product.mrp}</td>
               <td>{product.dop}</td>
             </tr>
           ))}

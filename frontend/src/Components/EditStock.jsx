@@ -125,7 +125,7 @@ export default function EditStock() {
                                 <div
                                     onClick={() => handleBrandSelect({ bname: "All Brands", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })}
                                     className="dropdown-item"
-                                    style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
+                                    style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px', border: "2px solid black" }}
                                 >
                                     All Brands
                                 </div>
@@ -134,7 +134,7 @@ export default function EditStock() {
                                         key={brand.id}
                                         onClick={() => handleBrandSelect(brand)}
                                         className="dropdown-item d-flex align-items-center"
-                                        style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
+                                        style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px', border: "2px solid black" }}
                                     >
                                         <img
                                             src={brand.logo}
@@ -173,7 +173,7 @@ export default function EditStock() {
                                 <div
                                     onClick={() => handleCategorySelect({ cname: "All Categories", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQSPw1y7xS9sruQyTYEOjSdRYLeiDMKip7g&s' })}
                                     className="dropdown-item"
-                                    style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
+                                    style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' ,border: "2px solid black" }}
                                 >
                                     All Categories
                                 </div>
@@ -182,7 +182,7 @@ export default function EditStock() {
                                         key={category.id}
                                         onClick={() => handleCategorySelect(category)}
                                         className="dropdown-item d-flex align-items-center"
-                                        style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px' }}
+                                        style={{ cursor: 'pointer', flex: '1 1 30%', minWidth: '150px',  border: "2px solid black"}}
                                     >
                                         <img
                                             src={category.logo}

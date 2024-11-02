@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function ProductCard({ pname, bname, cname, price, pimage }) {
+export default function ProductCard({ pname, bname, cname, price, pimage,aquantity }) {
   const [showOverlay, setShowOverlay] = useState(false);
   const [sellingPrice, setSellingPrice] = useState('');
   const [salesperson, setSalesperson] = useState('');
@@ -75,6 +75,7 @@ export default function ProductCard({ pname, bname, cname, price, pimage }) {
             marginBottom: 'auto', // Push button to the bottom
           }}>{pname}</p>
           <h6 className="card-text text-align-center" style={{textAlign:"center"}}>₹{price}</h6>
+          <h6 className="card-text text-align-center" style={{textAlign:"center",color:"red"}}>Quantity-{aquantity}</h6>
           <button className="btn btn-success" onClick={handleSellClick}>
             Sell
           </button>
