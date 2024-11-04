@@ -102,6 +102,7 @@ export default function EditProductCard({ pname, bname, cname, price, quantity, 
                     <div style={formContainerStyle}>
                         <button style={closeButtonStyle} onClick={handleCloseOverlay}>X</button>
                         <h3>Edit {pname}</h3>
+            <h6 className='text-muted'>{bname}   {cname}</h6>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label>Quantity</label>

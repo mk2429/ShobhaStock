@@ -89,6 +89,7 @@ export default function ProductCard({ pname, bname, cname, price, pimage,aquanti
               X
             </button>
             <h3>Sell {pname}</h3>
+            <h6 className='text-muted'>{bname}   {cname}</h6>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Price Sold</label>

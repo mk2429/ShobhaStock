@@ -22,7 +22,7 @@ export default function SellTable() {
         const data = await response.json();
         // Log fetched sales data
 
-        setSales(data);
+        setSales(data.reverse());
       } catch (error) {
         setError(error.message);
       } finally {
