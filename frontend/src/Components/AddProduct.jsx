@@ -15,6 +15,9 @@ export default function AddProduct() {
     const [vendor, setVendor] = useState('');
     const [mrp, setMrp] = useState('');
     const [isLoading, setIsLoading] = useState(false); // New state for loading
+    const [tax, setTax] = useState(0); // Tax rate in percentage
+    const [extraCharges, setExtraCharges] = useState(0); // Additional charges
+    const [actualPrice, setActualPrice] = useState(0);
 
     useEffect(() => {
         fetch('https://shobha-stock.onrender.com/api/getbrands')
@@ -32,6 +35,13 @@ export default function AddProduct() {
             .then(data => setAllProductNames(data))
             .catch(error => console.error('Error fetching product names:', error));
     }, []);
+    useEffect(() => {
+        // Calculate actual price whenever price, tax, or extraCharges changes
+        const calculatedPrice = parseFloat(price || 0);
+        const taxAmount = calculatedPrice * (tax / 100);
+        setActualPrice(calculatedPrice + taxAmount + parseFloat(extraCharges || 0));
+    }, [price, tax, extraCharges]);
+
 
     const handleProductNameChange = (e) => {
         const name = e.target.value;
@@ -59,12 +69,15 @@ export default function AddProduct() {
             pname: productName,
             bname: selectedBrand ? selectedBrand.bname : '',
             cname: selectedCategory ? selectedCategory.cname : '',
-            price: parseFloat(price),
+            price: parseFloat(actualPrice),
             quantity: parseInt(quantity),
             logo: logo || undefined,
             dop: dop || undefined,
             vendor: vendor || undefined,
             mrp: parseFloat(mrp) || undefined,
+            baseprice:price,
+            extracharges:extraCharges,
+            tax:tax
         };
 
         fetch('https://shobha-stock.onrender.com/api/addproduct', {
@@ -89,6 +102,9 @@ export default function AddProduct() {
                 setVendor('');
                 setMrp('');
                 setAvailableProductNames([]);
+                setTax(0);
+                setExtraCharges(0);
+                setActualPrice(0);
             })
             .catch(error => {
                 console.error('Error adding product:', error);
@@ -111,6 +127,7 @@ export default function AddProduct() {
                         className="form-select"
                         onChange={(e) => setSelectedBrand(brands.find(brand => brand.bname === e.target.value))}
                         value={selectedBrand ? selectedBrand.bname : ''}
+                        required
                     >
                         <option value="">Select Brand</option>
                         {brands.map((brand) => (
@@ -129,6 +146,7 @@ export default function AddProduct() {
                         className="form-select"
                         onChange={(e) => setSelectedCategory(categories.find(category => category.cname === e.target.value))}
                         value={selectedCategory ? selectedCategory.cname : ''}
+                        required
                     >
                         <option value="">Select Category</option>
                         {categories.map((category) => (
@@ -148,6 +166,7 @@ export default function AddProduct() {
                         className="form-control"
                         value={productName}
                         onChange={handleProductNameChange}
+                        required
                     />
                     {availableProductNames.length > 0 && (
                         <ul className="list-group bg-warning">
@@ -166,14 +185,106 @@ export default function AddProduct() {
 
                 {/* Price Input */}
                 <div className="mb-3">
-                    <label htmlFor="price" className="form-label">Price</label>
+                    <label htmlFor="price" className="form-label">Base Price</label>
+                    <input
+                      type="text" // Keeping as text to avoid input arrows
+                      inputMode="numeric" // Opens numeric keypad on mobile, allows only numbers
+                      pattern="\d*" // Ensures only integers are matched
+                      id="price"
+                      className="form-control"
+                      value={price}
+                      onChange={(e) => {
+                          // Allow only numeric input
+                          const value = e.target.value;
+                          if (/^\d*$/.test(value)) { // Regex allows only numbers
+                              setPrice(value);
+                          }
+                      }}
+                        style={{
+                            // Inline styles to hide the number input arrows
+                            MozAppearance: 'textfield', // For Firefox
+                            WebkitAppearance: 'none', // For Chrome, Safari, Edge, Opera
+                            margin: 0
+                        }}
+                        required
+                    />
+                </div>
+
+                 {/* TAX Charges Input */}
+                <div className="mb-3">
+                    <label htmlFor="tax" className="form-label">Tax Applied (%)</label>
+                    <select
+
+                        id="tax"
+                        className="form-select"
+                        value={tax}
+                        onChange={(e) => setTax(parseFloat(e.target.value))}
+                    >
+                        {[0, 5, 12, 18, 24, 28].map((rate) => (
+                            <option key={rate} value={rate}>{rate}%</option>
+                        ))}
+                    </select>
+                    <input
+                     type="text" // Keeping as text to avoid input arrows
+                     inputMode="numeric" // Opens numeric keypad on mobile, allows only numbers
+                     pattern="\d*" // E
+                        // type="number"
+                        className="form-control mt-2"
+                        value={tax}
+                        onChange={(e) => {
+                            // Allow only numeric input
+                            const value = e.target.value;
+                            if (/^\d*$/.test(value)) { // Regex allows only numbers
+                                setTax(value);
+                            }
+                        }}
+                        placeholder="Enter custom tax rate"
+                        style={{
+                            // Inline styles to hide the number input arrows
+                            MozAppearance: 'textfield', // For Firefox
+                            WebkitAppearance: 'none', // For Chrome, Safari, Edge, Opera
+                            margin: 0
+                        }}
+                    />
+                </div>
+
+                {/* Extra Charges Input */}
+                <div className="mb-3">
+                    <label htmlFor="extraCharges" className="form-label">Extra Charges (e.g., Transport)</label>
+                    <input
+                     type="text" // Keeping as text to avoid input arrows
+                     inputMode="numeric" // Opens numeric keypad on mobile, allows only numbers
+                     pattern="\d*" // E
+                        // type="number"
+                        id="extraCharges"
+                        className="form-control"
+                        value={extraCharges}
+                        onChange={(e) => {
+                            // Allow only numeric input
+                            const value = e.target.value;
+                            if (/^\d*$/.test(value)) { // Regex allows only numbers
+                                setExtraCharges(value);
+                            }
+                        }}
+                        // onChange={(e) => setExtraCharges(e.target.value)}
+                        style={{
+                            // Inline styles to hide the number input arrows
+                            MozAppearance: 'textfield', // For Firefox
+                            WebkitAppearance: 'none', // For Chrome, Safari, Edge, Opera
+                            margin: 0
+                        }}
+                        required
+                    />
+                </div>
+
+                {/* Actual Price (Calculated) */}
+                <div className="mb-3">
+                    <label className="form-label">Actual Price</label>
                     <input
                         type="number"
-                        id="price"
                         className="form-control"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        required
+                        value={actualPrice.toFixed(2)}
+                        disabled
                     />
                 </div>
 
@@ -181,12 +292,29 @@ export default function AddProduct() {
                 <div className="mb-3">
                     <label htmlFor="quantity" className="form-label">Quantity</label>
                     <input
-                        type="number"
+                    type="text" // Keeping as text to avoid input arrows
+                    inputMode="numeric" // Opens numeric keypad on mobile, allows only numbers
+                    pattern="\d*" // E
+                        // type="number"
                         id="quantity"
                         className="form-control"
                         value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
+                        step="1"
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            // Allow only integers by checking for a non-decimal number
+                            if (/^\d*$/.test(value)) {
+                                setQuantity(value);
+                            }
+                        }}
+                        style={{
+                            // Inline styles to hide the number input arrows
+                            MozAppearance: 'textfield', // For Firefox
+                            WebkitAppearance: 'none', // For Chrome, Safari, Edge, Opera
+                            margin: 0
+                        }}
                         required
+
                     />
                 </div>
 

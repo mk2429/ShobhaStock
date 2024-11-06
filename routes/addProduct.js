@@ -7,7 +7,7 @@ router.post("/addproduct", async (req, res) => {
         const productCollection = await mongoose.connection.db.collection("Products");
         const categoriesCollection = await mongoose.connection.db.collection("Categories");
 
-        const { pname, bname, cname, price, quantity, logo, dop } = req.body;
+        const { pname, bname, cname, price, quantity, logo, dop, vendor, mrp, baseprice, extracharges, tax } = req.body;
 
         // Check if the product already exists (case-insensitive)
         const existingProduct = await productCollection.findOne({
@@ -36,8 +36,11 @@ router.post("/addproduct", async (req, res) => {
             const updatedPrice = price ? calculatePriceWithMarkup(price) : existingProduct.price;
             const updatedLogo = logo || existingProduct.logo;
             const updatedDop = dop ? (existingProduct.dop + ',' + formatDate(dop)) : existingProduct.dop;
-            const updatedVendor = req.body.vendor || existingProduct.vendor;
-            const updatedMrp = req.body.mrp !== undefined ? req.body.mrp : null; // Set MRP to null if not provided
+            const updatedVendor = vendor || existingProduct.vendor;
+            const updatedMrp = mrp !== undefined ? mrp : null;
+            const updatedBaseprice = baseprice || existingProduct.baseprice;
+            const updatedExtracharges = extracharges || existingProduct.extracharges;
+            const updatedTax = tax || existingProduct.tax;
 
             await productCollection.updateOne(
                 { _id: existingProduct._id },
@@ -48,14 +51,17 @@ router.post("/addproduct", async (req, res) => {
                         logo: updatedLogo,
                         dop: updatedDop,
                         vendor: updatedVendor,
-                        mrp: updatedMrp
+                        mrp: updatedMrp,
+                        baseprice: updatedBaseprice,
+                        extracharges: updatedExtracharges,
+                        tax: updatedTax
                     }
                 }
             );
 
             return res.status(200).send({
                 message: "Product updated successfully",
-                product: { ...existingProduct, quantity: updatedQuantity, price: updatedPrice, logo: updatedLogo, dop: updatedDop, vendor: updatedVendor, mrp: updatedMrp }
+                product: { ...existingProduct, quantity: updatedQuantity, price: updatedPrice, logo: updatedLogo, dop: updatedDop, vendor: updatedVendor, mrp: updatedMrp, baseprice: updatedBaseprice, extracharges: updatedExtracharges, tax: updatedTax }
             });
         }
 
@@ -82,9 +88,12 @@ router.post("/addproduct", async (req, res) => {
             price: price ? calculatePriceWithMarkup(price) : null, // Apply 2% markup
             quantity,
             logo: productLogo,
-            mrp: req.body.mrp !== undefined ? req.body.mrp : null, // Set MRP to null if not provided
+            mrp: mrp !== undefined ? mrp : null, // Set MRP to null if not provided
             dop: formattedDop, // date in dd/mm/yyyy format
-            vendor: `${bname} Authorized Dealer`
+            vendor: `${bname} Authorized Dealer`,
+            baseprice,    // Add baseprice from frontend
+            extracharges, // Add extracharges from frontend
+            tax           // Add tax from frontend
         };
 
         // Insert the new product
