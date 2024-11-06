@@ -224,6 +224,9 @@ export default function EditStock() {
                                 price={product.price}
                                 pid={product.id}
                                 quantity={product.quantity}
+                                baseprice={product.baseprice}
+                                tax={product.tax}
+                                extracharges={product.extracharges}
                                 removeProduct={removeProduct}
                                 updateProduct={updateProduct}
                             />

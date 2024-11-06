@@ -10,6 +10,12 @@ router.post("/editproduct", async (req, res) => {
         const pid = parseInt(req.body.pid, 10);
         const newQuantity = parseInt(req.body.quantity, 10);  // Ensure quantity is an integer
         const newPrice = parseFloat(req.body.price);  // Ensure price is a decimal
+        const newBasePrice = parseFloat(req.body.baseprice); 
+        const newTax= parseFloat(req.body.tax); 
+        const newExtracharges= parseFloat(req.body.extracharges); 
+        const newPname=req.body.pname
+
+
 
         // Validate conversions
         if (isNaN(pid) || isNaN(newQuantity) || isNaN(newPrice)) {
@@ -18,7 +24,7 @@ router.post("/editproduct", async (req, res) => {
 
         const result = await productsCollection.updateOne(
             { id: pid },
-            { $set: { quantity: newQuantity, price: newPrice } }
+            { $set: { quantity: newQuantity, price: newPrice,baseprice:newBasePrice,tax:newTax,extracharges:newExtracharges,pname:newPname } }
         );
 
         if (result.modifiedCount > 0) {
