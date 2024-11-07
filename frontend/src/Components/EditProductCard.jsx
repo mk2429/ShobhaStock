@@ -26,6 +26,8 @@ export default function EditProductCard({
   const [loading, setLoading] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [canEdit, setCanEdit] = useState(false);
+  const [deleteClicked, setDeleteClicked] = useState(false);
+
 
   const calculateShownPrice = () => {
     const ac=calculateActualPrice();
@@ -115,6 +117,7 @@ export default function EditProductCard({
 
   const handleDelete = async () => {
     const deleteData = { pid: String(pid) };
+    setDeleteClicked(true)
 
     try {
       const response = await fetch('https://shobha-stock.onrender.com/api/deleteproduct', {
@@ -127,8 +130,11 @@ export default function EditProductCard({
         alert('Product deleted successfully!');
         removeProduct(pid);
         handleCloseOverlay();
+        setDeleteClicked(false)
       } else {
         alert('Failed to delete the product.');
+        setDeleteClicked(false)
+
       }
     } catch (error) {
       console.error('Error:', error);
@@ -288,7 +294,7 @@ export default function EditProductCard({
             {showDeleteConfirmation && (
               <div style={popupStyle}>
                 <p>Are you sure you want to delete this product?</p>
-                <button className="btn btn-danger mx-2" onClick={handleDelete}>
+                <button className="btn btn-danger mx-2" onClick={handleDelete} disabled={deleteClicked}>
                   Yes, Delete it
                 </button>
                 <button className="btn btn-secondary ml-2" onClick={() => setShowDeleteConfirmation(false)}>

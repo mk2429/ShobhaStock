@@ -3,7 +3,7 @@ import ProductTable from './ProductTable'
 
 export default function ShowAll() {
   return (
-    <div style={{ overflowX: 'auto' }}>
+    <div>
     <ProductTable />
   </div>
   )
