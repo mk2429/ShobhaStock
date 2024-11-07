@@ -378,6 +378,7 @@ const overlayStyle = {
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
+    overflowY: 'auto',
 };
 
 const formContainerStyle = {
@@ -387,6 +388,7 @@ const formContainerStyle = {
     width: '400px',
     position: 'relative',
     boxShadow: '0 0 15px rgba(0, 0, 0, 0.3)',
+    overflowY: 'auto',
 };
 
 const closeButtonStyle = {
