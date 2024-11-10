@@ -189,14 +189,14 @@ export default function AddProduct() {
                     <input
                       type="text" // Keeping as text to avoid input arrows
                       inputMode="numeric" // Opens numeric keypad on mobile, allows only numbers
-                      pattern="\d*" // Ensures only integers are matched
+                      pattern="^\d*\.?\d*$" // Ensures only integers are matched
                       id="price"
                       className="form-control"
                       value={price}
                       onChange={(e) => {
                           // Allow only numeric input
                           const value = e.target.value;
-                          if (/^\d*$/.test(value)) { // Regex allows only numbers
+                          if (/^\d*\.?\d*$/.test(value)) { // Regex allows only numbers
                               setPrice(value);
                           }
                       }}
@@ -227,14 +227,14 @@ export default function AddProduct() {
                     <input
                      type="text" // Keeping as text to avoid input arrows
                      inputMode="numeric" // Opens numeric keypad on mobile, allows only numbers
-                     pattern="\d*" // E
+                     pattern="^\d*\.?\d*$" // E
                         // type="number"
                         className="form-control mt-2"
                         value={tax}
                         onChange={(e) => {
                             // Allow only numeric input
                             const value = e.target.value;
-                            if (/^\d*$/.test(value)) { // Regex allows only numbers
+                            if (/^\d*\.?\d*$/.test(value)) { // Regex allows only numbers
                                 setTax(value);
                             }
                         }}
@@ -254,7 +254,7 @@ export default function AddProduct() {
                     <input
                      type="text" // Keeping as text to avoid input arrows
                      inputMode="numeric" // Opens numeric keypad on mobile, allows only numbers
-                     pattern="\d*" // E
+                     pattern="^\d*\.?\d*$" // E
                         // type="number"
                         id="extraCharges"
                         className="form-control"
@@ -262,7 +262,7 @@ export default function AddProduct() {
                         onChange={(e) => {
                             // Allow only numeric input
                             const value = e.target.value;
-                            if (/^\d*$/.test(value)) { // Regex allows only numbers
+                            if (/^\d*\.?\d*$/.test(value)) { // Regex allows only numbers
                                 setExtraCharges(value);
                             }
                         }}
