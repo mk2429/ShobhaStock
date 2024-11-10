@@ -238,13 +238,13 @@ export default function EditProductCard({
                 <input
                    type="text" // Keeping as text to avoid input arrows
                    inputMode="numeric" // Opens numeric keypad on mobile, allows only numbers
-                   pattern="\d*"
+                   pattern="^\d*\.?\d*$"
                       className="form-control"
                       value={newBasePrice}
                       onChange={(e) => {
                         // Allow only numeric input
                         const value = e.target.value;
-                        if (/^\d*$/.test(value)) { // Regex allows only numbers
+                        if (/^\d*\.?\d*$/.test(value)) { // Regex allows only numbers
                             setNewBasePrice(e.target.value);
                         }
                     }}
@@ -255,14 +255,14 @@ export default function EditProductCard({
                 <input
                 type="text" // Keeping as text to avoid input arrows
                 inputMode="numeric" // Opens numeric keypad on mobile, allows only numbers
-                pattern="\d*"
+                pattern="^\d*\.?\d*$"
                       
                       className="form-control"
                       value={newTax}
                       onChange={(e) => {
                         // Allow only numeric input
                         const value = e.target.value;
-                        if (/^\d*$/.test(value)) { // Regex allows only numbers
+                        if (/^\d*\.?\d*$/.test(value)) { // Regex allows only numbers
                             setNewTax(e.target.value);
                         }
                     }}
@@ -273,13 +273,13 @@ export default function EditProductCard({
                 <input
                       type="text" // Keeping as text to avoid input arrows
                       inputMode="numeric" // Opens numeric keypad on mobile, allows only numbers
-                      pattern="\d*"
+                      pattern="^\d*\.?\d*$"
                       className="form-control"
                       value={newExtraCharges}
                       onChange={(e) => {
                         // Allow only numeric input
                         const value = e.target.value;
-                        if (/^\d*$/.test(value)) { // Regex allows only numbers
+                        if (/^\d*\.?\d*$/.test(value)) { // Regex allows only numbers
                             setNewExtraCharges(e.target.value)
                         }
                     }}
