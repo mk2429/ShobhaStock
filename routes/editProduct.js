@@ -14,6 +14,7 @@ router.post("/editproduct", async (req, res) => {
         const newTax= parseFloat(req.body.tax); 
         const newExtracharges= parseFloat(req.body.extracharges); 
         const newPname=req.body.pname
+        const newLogo=req.body.logo
 
 
 
@@ -24,7 +25,7 @@ router.post("/editproduct", async (req, res) => {
 
         const result = await productsCollection.updateOne(
             { id: pid },
-            { $set: { quantity: newQuantity, price: newPrice,baseprice:newBasePrice,tax:newTax,extracharges:newExtracharges,pname:newPname } }
+            { $set: { quantity: newQuantity, price: newPrice,baseprice:newBasePrice,tax:newTax,extracharges:newExtracharges,pname:newPname ,logo:newLogo} }
         );
 
         if (result.modifiedCount > 0) {

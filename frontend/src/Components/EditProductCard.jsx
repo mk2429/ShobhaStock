@@ -11,6 +11,7 @@ export default function EditProductCard({
   quantity,
   pimage,
   pid,
+  logo,
   updateProduct,
   removeProduct
 }) {
@@ -18,6 +19,7 @@ export default function EditProductCard({
   const validQuantity = typeof quantity === 'object' ? quantity.$numberDecimal : quantity;
   const [showOverlay, setShowOverlay] = useState(false);
   const [newPname, setNewPname] = useState(pname);
+  const [newLogo, setNewLogo] = useState(logo);
   const [newPrice, setNewPrice] = useState(validPrice);
   const [newQuantity, setNewQuantity] = useState(validQuantity);
   const [newBasePrice, setNewBasePrice] = useState(baseprice);
@@ -57,6 +59,7 @@ export default function EditProductCard({
   const handleCloseOverlay = () => {
     setShowOverlay(false);
     setCanEdit(false);
+    setShowDeleteConfirmation(false)
     setNewBasePrice(baseprice);
     setNewTax(tax);
     setNewExtraCharges(extracharges);
@@ -75,6 +78,7 @@ export default function EditProductCard({
       pname:newPname,
       baseprice: newBasePrice,
       tax: newTax,
+      logo:newLogo,
       extracharges: newExtraCharges
     };
 
@@ -98,7 +102,8 @@ export default function EditProductCard({
           pname:newPname,
           baseprice: newBasePrice,
           tax: newTax,
-          extracharges: newExtraCharges
+          extracharges: newExtraCharges,
+          logo:newLogo
 
         });
         handleCloseOverlay();
@@ -280,6 +285,17 @@ export default function EditProductCard({
                     }}
                     />
               </div>
+              <div className="form-group">
+            
+            <label>Logo</label>
+            <input
+              type="text"
+              className="form-control"
+              value={newLogo}
+              onChange={(e) => setNewLogo(e.target.value)}
+              required
+            />
+          </div>
 
     
 
@@ -388,6 +404,7 @@ const overlayStyle = {
 };
 
 const formContainerStyle = {
+    top: '40px',
     backgroundColor: 'white',
     padding: '30px',
     borderRadius: '10px',

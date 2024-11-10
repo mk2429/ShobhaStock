@@ -226,6 +226,7 @@ export default function EditStock() {
                                 quantity={product.quantity}
                                 baseprice={product.baseprice}
                                 tax={product.tax}
+                                logo={product.logo}
                                 extracharges={product.extracharges}
                                 removeProduct={removeProduct}
                                 updateProduct={updateProduct}
