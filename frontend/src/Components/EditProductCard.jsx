@@ -15,8 +15,29 @@ export default function EditProductCard({
   updateProduct,
   removeProduct
 }) {
-  const validPrice = typeof price === 'object' ? price.$numberDecimal : price;
-  const validQuantity = typeof quantity === 'object' ? quantity.$numberDecimal : quantity;
+  // const validPrice = typeof price === 'object' ? price.$numberDecimal : price;
+  // const validQuantity = typeof quantity === 'object' ? quantity.$numberDecimal : quantity;
+  // const validPrice = (price && typeof price === 'object') ? price.$numberDecimal : (price || 0);
+// const validQuantity = (quantity && typeof quantity === 'object') ? quantity.$numberDecimal : (quantity || 0);
+
+
+// const validPrice = (price && typeof price === 'object' && price.$numberDecimal !== undefined) ? price.$numberDecimal : (typeof price === 'number' ? price : 0);
+// const validQuantity = (quantity && typeof quantity === 'object' && quantity.$numberDecimal !== undefined) ? quantity.$numberDecimal : (typeof quantity === 'number' ? quantity : 0);
+// const validPrice = 12
+// const validQuantity = 12
+const parseDecimal = (value) => {
+  if (value && typeof value === 'object' && value.$numberDecimal !== undefined) {
+    return parseFloat(value.$numberDecimal);
+  } else if (typeof value === 'number') {
+    return value;
+  } else if (typeof value === 'string' && !isNaN(value)) {
+    return parseFloat(value);
+  }
+  return 0;
+};
+
+const validPrice = parseDecimal(price);
+const validQuantity = parseDecimal(quantity);
   const [showOverlay, setShowOverlay] = useState(false);
   const [newPname, setNewPname] = useState(pname);
   const [newLogo, setNewLogo] = useState(logo);
@@ -167,6 +188,11 @@ export default function EditProductCard({
           style={{ width: '160px', height: '100px', objectFit: 'contain' }}
         />
         <div className="card-body d-flex flex-column" style={{ flex: '1', height: '150px' }}>
+        <div className='d-flex justify-content-between' style={{fontSize:"10px"}} >
+            <div style={{background:"#F1EFEC",color:"#123458",border:"1px solid #123458" , padding:"5px", borderRadius:"17px"}}>{bname}</div>
+            <div style={{background:"#ded3db",color:"#6A1E55",border:"1px solid #6A1E55" , padding:"5px", borderRadius:"17px"}}>{cname}</div>
+
+          </div>
           <p className="card-title text-align-center mb-2" style={titleStyle}>{pname}</p>
           <p className="card-text text-align-center my-0" style={{ textAlign: "center" }}>₹{validPrice}</p>
           <p className="card-text text-align-center mb-3" style={{ textAlign: "center" }}>Available-{validQuantity} Pcs</p>
@@ -175,6 +201,9 @@ export default function EditProductCard({
           </button>
         </div>
       </div>
+
+   
+    
 
       {showOverlay && (
         <div style={overlayStyle}>
@@ -325,61 +354,6 @@ export default function EditProductCard({
   );
 }
 
-// // Styles
-// const cardStyle = {
-//   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
-//   transition: '0.3s',
-//   borderRadius: '10px',
-//   height: '290px',
-//   display: 'flex',
-//   flexDirection: 'column',
-// };
-
-// const overlayStyle = {
-//   position: 'fixed',
-//   top: 0,
-//   left: 0,
-//   width: '100%',
-//   height: '100%',
-//   backgroundColor: 'rgba(0, 0, 0, 0.7)',
-//   display: 'flex',
-//   justifyContent: 'center',
-//   alignItems: 'center',
-//   zIndex: 1000,
-// };
-
-// const formContainerStyle = {
-//   backgroundColor: 'white',
-//   padding: '20px',
-//   width: '400px',
-//   borderRadius: '10px',
-// };
-
-// const closeButtonStyle = {
-//   position: 'absolute',
-//   top: '10px',
-//   right: '10px',
-//   backgroundColor: 'red',
-//   color: 'white',
-//   border: 'none',
-//   fontSize: '18px',
-// };
-
-// const titleStyle = {
-//   textAlign: 'center',
-// };
-
-// const popupStyle = {
-//   position: 'absolute',
-//   bottom: '10px',
-//   left: '50%',
-//   transform: 'translateX(-50%)',
-//   backgroundColor: 'white',
-//   padding: '10px',
-//   borderRadius: '5px',
-//   boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.2)',
-// };
-// Styles
 const cardStyle = {
     boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
     transition: '0.3s',
