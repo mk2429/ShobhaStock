@@ -28,10 +28,21 @@ export default function ProductTable() {
         const data = await response.json();
 
         // Convert price and quantity fields if they are objects
+        const safeDecimal = (value) => {
+          if (value === null || value === undefined) return 0;
+          if (typeof value === 'object' && value.$numberDecimal !== undefined) {
+            return parseFloat(value.$numberDecimal);
+          } else if (typeof value === 'number') {
+            return value;
+          } else if (typeof value === 'string' && !isNaN(value)) {
+            return parseFloat(value);
+          }
+          return 0;
+        };
         const convertedProducts = data.map(product => ({
           ...product,
-          price: typeof product.price === 'object' ? product.price.$numberDecimal : product.price,
-          quantity: typeof product.quantity === 'object' ? product.quantity.$numberDecimal : product.quantity,
+          price: safeDecimal(product.price),
+          quantity: safeDecimal(product.quantity),
         }));
 
         // Initial sort by default field
