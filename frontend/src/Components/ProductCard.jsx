@@ -66,9 +66,14 @@ export default function ProductCard({ pname, bname, cname, price, pimage,aquanti
           style={{ width: '160px', height: '100px', objectFit: 'contain' }} // Maintain image size
         />
         <div className="card-body d-flex flex-column" style={{ flex: '1', height: '150px' }}>
+          <div className='d-flex justify-content-between' style={{fontSize:"10px"}} >
+            <div style={{background:"#F1EFEC",color:"#123458",border:"1px solid #123458" , padding:"5px", borderRadius:"17px"}}>{bname}</div>
+            <div style={{background:"#ded3db",color:"#6A1E55",border:"1px solid #6A1E55" , padding:"5px", borderRadius:"17px"}}>{cname}</div>
+
+          </div>
           <p className="card-title text-align-center" style={{
             textAlign: "center",
-            fontSize: "0.9rem", // Font size
+            fontSize: "13px", // Font size
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "normal", // Allow text to wrap

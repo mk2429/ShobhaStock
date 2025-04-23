@@ -21,6 +21,7 @@ app.use("/api", require("./routes/deleteProduct"));
 app.use("/api", require("./routes/addCategory"));
 app.use("/api", require("./routes/addBrand"));
 app.use("/api", require("./routes/getSales"));
+app.use("/api", require("./routes/getReport"));
 
 
 
