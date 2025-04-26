@@ -74,8 +74,8 @@ export default function ProductCard({ pname, bname, cname, price, pimage,aquanti
           <p className="card-title text-align-center" style={{
             textAlign: "center",
             fontSize: "13px", // Font size
-            overflow: "hidden",
-            textOverflow: "ellipsis",
+
+
             whiteSpace: "normal", // Allow text to wrap
             marginBottom: 'auto', // Push button to the bottom
           }}>{pname}</p>
@@ -150,7 +150,7 @@ const cardStyle = {
   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
   transition: '0.3s',
   borderRadius: '10px',
-  height: '290px', // Set a fixed height for the card
+  height: '300px', // Set a fixed height for the card
   display: 'flex',
   flexDirection: 'column',
   padding:"0px"

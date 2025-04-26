@@ -358,7 +358,7 @@ const cardStyle = {
     boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
     transition: '0.3s',
     borderRadius: '10px',
-    height: '290px',
+    height: '300px',
     display: 'flex',
     flexDirection: 'column',
 };
@@ -400,9 +400,7 @@ const closeButtonStyle = {
 
 const titleStyle = {
     textAlign: "center",
-    fontSize: "0.9rem",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
+    fontSize: "13px",
     whiteSpace: "normal",
     marginBottom: 'auto',
 };
